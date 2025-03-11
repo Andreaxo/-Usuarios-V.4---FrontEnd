@@ -1,0 +1,47 @@
+@import url('../App.css');
+
+.Skills__box-general{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--color-dark-gray);
+    width: 80%;
+    height: 100%;
+    padding-left: 20%;
+    padding-top: 10%;
+display: flex;
+flex-direction: column;
+}
+
+.Skills__box-general>div:nth-child(1){
+display: flex;
+flex-direction: row;
+}
+
+
+
+.skills__box__back {
+    all: unset;
+    position: relative;
+    left: 0%;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding: 0;
+    margin: 0;
+}
+
+.skills__box__back>a {
+
+    all: unset;
+    text-decoration: none;
+    color: black;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.skills__box__back>a:hover {
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.37);
+}

@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+    --color-green: #39a900;
+      --color-dark-green: #007832;
+      --color-blue: #00304D;
+      --color-white: #F6F6F6;
+      --color-gray: #e9e9e9   ;
+      --color-dark-gray: #bebebe;
+      --color-dark-gray-transparent: #bebebe2f;
+      --color-black: #1a1a1a;
+      --font-weight-title: 700;
+      --font-weight-subtitle: 500;
+      --font-weight-text: 400;
+      --border-radius-box: 26px;
+      --border-radius-box-2: 16px;
+  }
+
+    * {
+        font-family: "Work sans", Arial;
+        letter-spacing: -1.2px;
+        padding: 0;
+        margin: 0;
+    }
+
+/* Estilos generales */
+.login_container-passwordinput,
+.login_container-userinput {
+    border: 1px solid var(--color-black); /* Borde negro */
+    height: 2.8rem;
+    border-radius: 2rem;
+    background-color: transparent;
+    padding-left: 10px;
+    outline: none;
+    width: 100% !important;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+/* Estilo para cuando los inputs están enfocados */
+.login_container-passwordinput:focus,
+.login_container-userinput:focus {
+    border-color: #4CAF50; /* Verde */
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+    
+}
+
+/* Estilo para los labels */
+.login__container--labelsubcontainer label,
+.standard-input-container label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-220%);
+    color: var(--color-black);
+    pointer-events: none;
+    transition: .3s ease-in-out;
+    font-size: 12px;
+    background-color: var(--color-white);
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/* Subcontendor para label e input */
+.login__container--labelsubcontainer {
+    position: relative;
+    margin-bottom: 1rem; /* Espacio entre campos */
+}
+
+.submit-button-aprendiz{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    position: absolute; /* Posiciona el texto de manera absoluta respecto al contenedor */
+    top: 0; /* Parte superior */
+    left: 0; /* Esquina izquierda */
+    font-size: 16px; /* Tamaño del texto */
+    color: black; /* Color del texto */
+    padding: 3rem; 
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem; /* Espacio entre los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    align-items: center; /* Centra los botones verticalmente */
+}
+
+
+.select-button-aprendiz{
+    padding: 1rem;
+    background-color: var(--color-green);
+    border: solid 2px black;
+    border-radius: 1rem;
+    
+  }
+
+
+  .submit-button{
+    padding: 1rem;
+    background-color: var(--color-green);
+    border: solid 2px black;
+    border-radius: 1rem;
+    color: var(--color-black);
+
+  }
+
+
+.submit-button-guardar{
+    padding: 1rem;
+    background-color: var(--color-white);
+    border: solid 2px black;
+    border-radius: 1rem;
+    color: var(--color-black);
+}

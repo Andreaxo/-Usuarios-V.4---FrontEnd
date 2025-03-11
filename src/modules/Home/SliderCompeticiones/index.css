@@ -1,0 +1,49 @@
+#slidercompeticiones{
+    height:40vh;
+    width: 120vw;
+    margin-left: -10vw;
+    background-color: white;
+    position: relative;
+    top: -10vh;
+    filter: blur(8px);
+    border-radius: 120%;
+    overflow-x: hidden;
+}
+body {
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+.slidercompeticiones__container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: -300px;
+    overflow: hidden;
+    width: 100vw;
+}
+.slidercompeticiones__title{
+    color: var(--color-dark-gray);
+    font-weight: var(--font-weight-subtitle);
+    position: relative;
+    z-index: 1;
+    font-size: 1.2rem;
+}
+.slidercompeticiones__track{
+    display: flex;
+    width: 100px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+.slidercompeticiones__track .competitionLogo{}
+.competitionLogo {
+    position: relative;
+    z-index: 1;
+    width: 6rem;
+}
+.logoSenaSoft{
+    width: 10rem;
+}

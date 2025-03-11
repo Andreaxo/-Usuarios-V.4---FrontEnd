@@ -1,0 +1,26 @@
+#footer-container{
+    width: 100vw;
+    height: auto;
+    padding: 2rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem,1fr));
+    background-color: var(--color-black);
+}
+
+#footer-logo{
+    width: 8rem;
+    display: grid;
+    align-self: center;
+}
+
+.footer-talentoRisaralda, .footer-competiciones, .footer-redesSociales{
+    color: var(--color-green);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.footer-talentoRisaralda a, .footer-competiciones a, .footer-redesSociales a{
+    color: white;
+    text-decoration: none;
+    justify-self: center;
+}
