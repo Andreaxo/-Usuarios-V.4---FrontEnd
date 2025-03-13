@@ -1,0 +1,45 @@
+.container {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin-top: 4rem;
+  }
+  
+  .scroll {
+    white-space: nowrap;
+    background-color: var(--color-dark-gray);
+    height: 1.5rem;
+    display: flex;
+    place-items: center;
+  }
+  
+  .scroll div {
+    display: flex;
+    gap: 2em;
+    
+  }
+  
+  .scroll p {
+    font-size: 1rem;
+    color: rgb(255, 255, 255);
+    font-weight: var(--font-weight-text);
+    margin-bottom: 0;
+    line-height: 10px;
+    letter-spacing: 0;
+    color: var(--color-black)
+
+  }
+  
+  .RightToLeft {
+    animation: RightToLeft 30s infinite linear;
+  }
+  
+  @keyframes  RightToLeft {
+    from {
+      transform: translateX(0%);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  

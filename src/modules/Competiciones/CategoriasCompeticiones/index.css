@@ -1,0 +1,126 @@
+#slidercompeticiones{
+    height:40vh;
+    width: 120vw;
+    margin-left: -10vw;
+    background-color: white;
+    position: relative;
+    top: -10vh;
+    filter: blur(8px);
+    border-radius: 120%;
+    overflow-x: hidden;
+    box-shadow: 0 -50px 60px #38a90063;
+}
+body {
+    margin: 0;
+    overflow-x: hidden;
+  }
+.decoration{
+    position: absolute;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    pointer-events: none; 
+}
+.decoration3{
+    width: 15rem;
+    transform: rotateZ(0deg);
+    position: absolute;
+    top: 200px;
+    right: -4vw;
+    animation: decorationMove3 30s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+@keyframes decorationMove3 {
+    0%{
+        transform: rotateZ(0deg);
+        top: 200px;
+    }
+    25%{
+        transform: rotateZ(-15deg);
+        top: 230px;
+    }
+    35%{
+        transform: rotateZ(-20deg);
+        top: 210px;
+    }
+    55%{
+        transform: rotateZ(-30deg);
+        top: 190px;
+    }
+    75%{
+        transform: rotateZ(-15deg);
+        top: 190px;
+    }
+    100%{
+        transform: rotateZ(0deg);
+        top: 200px;
+    }
+}
+
+
+  
+  .slidercompeticiones-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: -260px;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .slidercompeticiones-subcontainer {
+    display: flex;
+    gap: 10px; /* Espacio entre el select y el input */
+    align-items: center;
+    padding: 40px;
+  }
+  
+  .select,
+  .searchskills {
+    padding: 14px 20px;
+    padding-right: 50px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius-box-2);
+    font-size: 16px;
+  }
+  
+  .select {
+    min-width: 200px;
+  }
+  
+  .searchskills {
+    width: 250px;
+  }
+  
+.slidercompeticiones-skills{
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem,1fr));
+    
+}
+
+.slidercompeticiones-skill{
+    padding: 20px;
+    border: 1px solid var(--color-black);
+    border-radius: var(--border-radius-box);
+}
+
+.slidercompeticiones-skill img{
+    max-width: 100%;
+    border-radius: var(--border-radius-box-2);
+    background-color: gray;
+}
+.slidercompeticiones-skill h1{
+    font-weight: var(--font-weight-subtitle);
+    font-size: 2rem;
+    margin-top: 10px;
+}
+.slidercompeticiones-skill a{
+    color: var(--color-green);
+    text-decoration: none;
+}

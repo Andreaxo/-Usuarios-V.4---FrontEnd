@@ -1,0 +1,78 @@
+/* Header.css */
+.header {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: center; 
+    padding: 10px 20px;
+    justify-content:start;
+    height: 4rem;
+
+  }
+  
+  .left-container {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .center-container {
+    display: flex;
+    justify-content: center;
+        
+  }
+  
+  .right-container {
+  }
+  
+  .logo1, .logo2 {
+    width: 40px; 
+    height: auto;
+    margin-right: 20px;
+  }
+  
+  .menu {
+    list-style: none;
+    display: flex;
+    gap: 20px; /* Espacio entre los botones */
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+  
+  .menu-btn {
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s;
+    font-weight: var(--font-weight-subtitle);
+    transition: 0.1s ease-in-out;
+    overflow: hidden;
+  }
+  
+  .menu-btn:hover {
+    transform: scale(0.98);
+    }
+  .menu-btn1 {
+    background-color: var(--color-green);
+    width: 10vw;
+    max-width: 12rem;
+    height: 6vh;
+    max-height: 3rem;
+    border-radius: 6px;
+    color: var(--color-white);
+    
+  }
+  .menu-btn2 {
+    background-color: var(--color-black);
+    width: 10vw;
+    max-width: 12rem;
+    height: 6vh;
+    max-height: 3rem;
+    border-radius: 6px;
+    color: var(--color-white);    
+  }
+  .menu-btn{
+    font-size: clamp(.3rem, 2vw, 1rem);
+  }
+  
+  

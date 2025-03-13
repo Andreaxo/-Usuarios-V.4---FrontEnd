@@ -1,0 +1,189 @@
+body {
+    overflow: hidden !important;
+}
+
+.formulario__container{
+    display: grid;
+    grid-template-columns: 60vw 40vw;
+    overflow: hidden;
+    height: 100vh;
+    background-color: var(--color-green);
+}
+.formulario__container--formulario{
+    gap: 30px;
+    padding: 60px !important;
+    display: flex;
+    padding: 30px;
+    flex-direction: column;
+    background-color: var(--color-white);
+    width:100%;
+    border-radius: 0 4rem 4rem 0;
+}
+.formulario__container--formulario a{
+    place-self: end;
+    text-decoration: none;
+    color: var(--color-black);
+    font-size: .9rem;
+    font-weight: var(--font-weight-subtitle);
+}
+.formulario__container--formulario input{
+    width: 18%;
+}
+
+.formulario__container-submit{
+    margin-top: 10px;
+}
+.formulario__container-passwordinput, .formulario__container-userinput{
+    border: 1px solid var(--color-black);
+    border-radius: var(--border-radius-box-3);
+    background-color: transparent;
+    padding-left: 10px;
+    outline: none;
+    width: 100% !important;
+    height: 3rem;
+    font-size: 1rem;
+}
+.formulario__container--labelsubcontainer{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 90%;
+    min-width: 16rem;
+    text-align: center;
+}
+.formulario__container--labelsubcontainer label, .standard-input-container label{
+    position:absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-220%);
+    color: var(--color-black);
+    pointer-events: none;
+    transition: .3s ease-in-out;
+    font-size: 12px;
+    background-color: var(--color-white);
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.formulario__container--img{
+    padding: 20px;
+    height: 90vh;
+    width: 80%;
+}
+.formulario__container--img img{
+    height: 100%;
+    width: 100%;
+    border-radius: var(--border-radius-box);
+    
+}
+.formulario__container--figure1{
+    position: absolute;
+    width: 20rem;
+    top: 60vh;
+    left: 55vw;
+    filter: blur(2px);
+    transform: rotateZ(90deg);
+    overflow: hidden;
+
+}
+.formulario__container--figure2{
+    position: absolute;
+    width: 27rem;
+    top: 6vh;
+    right: -100px;
+    filter: blur(2px);
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    transform: rotateZ(0deg);
+    overflow: hidden;
+}
+.formulario__container-submit{
+    width: 200px;
+    height: 60px;
+    font-size: 1.2rem;
+    border: 3px solid var(--color-black);
+    box-shadow: 2px 2px 0px var(--color-black);
+    cursor: pointer;
+    color: var(--color-black);
+    font-weight: var(--font-weight-subtitle);
+    padding: 4px 5px 5px 4px;
+    place-content: center;
+    place-items: center;
+    text-align: center;
+    border-radius: 12px;
+    background-color: var(--color-green);
+    transition: 0.1s ease-in-out;
+}
+.formulario__container-submit:hover{
+    transform: scale(.98);
+}
+
+.banner__perspective--text {
+    perspective: 980px;
+    display: grid;
+    place-content: center;
+    place-self: center;
+    margin-left: 100px;
+
+}
+
+#banner__container--title {
+    font-weight: var(--font-weight-title);
+    place-self: center;
+    font-size: 5rem;
+    color: var(--color-black);
+    transform: rotateX(36deg);
+    letter-spacing: -2px;
+    text-align: center;
+    animation: moveTitleBanner 20s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes moveTitleBanner {
+    0%{
+        transform: rotateX(36deg);
+    }
+    
+    50%{
+        transform: rotateX(-26deg);
+        
+    }
+    100%{
+        transform: rotateX(36deg);
+    }
+}
+
+.formulario__container--formulario form{
+    display: grid;
+    grid-template-columns: 45% 35%;
+    justify-content: center;
+    gap: 2rem;
+    align-items: start;
+}
+.formulario__division{
+    display: grid;
+    gap: 2.5rem;
+}
+.formulario__division1{
+    width: 100%;
+}
+.formulario__division2{
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+}
+.formulario__division3{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 2rem;
+}
+.formulario__container--labelsubcontainer {
+    width: 100%;
+    min-width: unset; 
+}
+.formulario__container-passwordinput, 
+.formulario__container-userinput {
+    width: 100%;
+}

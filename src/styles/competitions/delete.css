@@ -1,0 +1,40 @@
+
+
+
+.delete__flotant__window {
+    all: unset;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    left: 0%;
+    top: 0%;
+    z-index: 9999;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
+.delete__flotant__window>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    width: 50%;
+    height: 15%;
+    border-radius: 2rem;
+    border: solid 2px black;
+}
+
+.delete__flotant__window>div>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.delete__flotant__window__box>div>button:nth-of-type(1){
+    border: solid 2px red;
+}

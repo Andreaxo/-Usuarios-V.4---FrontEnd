@@ -1,0 +1,235 @@
+/* Contenedor principal */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+  --color-green: #39a900;
+  --color-dark-green: #007832;
+  --color-blue: #00304D;
+  --color-white: #F6F6F6;
+  --color-gray: #e9e9e9;
+  --color-dark-gray: #bebebe;
+  --color-dark-gray-transparent: #bebebe2f;
+  --color-black: #1a1a1a;
+  --font-weight-title: 700;
+  --font-weight-subtitle: 500;
+  --font-weight-text: 400;
+  --border-radius-box: 26px;
+  --border-radius-box-2: 16px;
+}
+
+.competitors-listing-container{
+  width: 90%;
+  margin: 0 5% 0 5%;
+
+}
+
+.main-title{
+    color: var(--color-white);
+    background-color: var(--color-black);
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 1rem;
+
+}
+
+.action-header {
+    display: grid;
+    justify-content: start;
+    align-items: start;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    margin-left: -0.5rem;
+    height: 100%; /* Asegura que el contenedor tenga altura suficiente */
+}
+
+
+.subtitle-text {
+    align-self: end; /* Alinea el texto hacia la parte baja del contenedor */
+    font-size: 2rem;
+    margin-left: -19rem;
+    margin-top: -1rem;
+    font-weight: 500;
+}
+
+.main-title {
+    font-size: 3.4rem;
+    padding: 0.5rem;
+}
+
+
+/* Estilos para el componente VerCompetidor (pop-up de visualización) */
+.competitor-view-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Work Sans', sans-serif;
+  }
+  
+  .competitor-view-content {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius-box-2);
+    padding: 2rem;
+    width: 80%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  }
+  
+  .competitor-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-green);
+    padding-bottom: 1rem;
+  }
+  
+  .competitor-view-title {
+    font-size: 2rem;
+    font-weight: var(--font-weight-title);
+    color: var(--color-blue);
+    margin: 0;
+  }
+  
+  .competitor-view-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-black);
+    transition: color 0.3s;
+  }
+  
+  .competitor-view-close-btn:hover {
+    color: var(--color-green);
+  }
+  
+  .competitor-view-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .competitor-view-info-section {
+    background-color: var(--color-gray);
+    border-radius: var(--border-radius-box-2);
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .competitor-view-info-title {
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-subtitle);
+    color: var(--color-blue);
+    margin-bottom: 0.5rem;
+    border-left: 4px solid var(--color-green);
+    padding-left: 0.5rem;
+  }
+  
+  .competitor-view-data-row {
+    display: flex;
+    margin-bottom: 0.75rem;
+  }
+  
+  .competitor-view-label {
+    font-weight: var(--font-weight-subtitle);
+    color: var(--color-black);
+    width: 40%;
+  }
+  
+  .competitor-view-value {
+    color: var(--color-black);
+    width: 60%;
+  }
+  
+  .competitor-view-skill {
+    grid-column: 1 / -1;
+    background-color: var(--color-dark-gray-transparent);
+    padding: 1rem;
+    border-radius: var(--border-radius-box-2);
+    margin-top: 1rem;
+    border-left: 4px solid var(--color-green);
+  }
+  
+  .competitor-view-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-dark-gray);
+  }
+  
+  .competitor-view-footer button {
+    background-color: var(--color-green);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .competitor-view-footer button:hover {
+    background-color: var(--color-dark-green);
+  }
+  
+  /* Estilo para pantallas pequeñas */
+  @media (max-width: 768px) {
+    .competitor-view-content {
+      width: 95%;
+      padding: 1.5rem;
+    }
+    
+    .competitor-view-info {
+      grid-template-columns: 1fr;
+    }
+    
+    .competitor-view-title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  /* Animación para el modal */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .competitor-view-modal {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .competitor-view-content {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Additional styles for buttons in the ListadoCompetidor component */
+  .edit-button:hover {
+    color: var(--color-blue);
+    border-color: var(--color-blue);
+  }
+  
+  .view-button:hover {
+    color: var(--color-green);
+    border-color: var(--color-green);
+  }
+  
+  /* Styles for "No disponible" text */
+  .competitor-view-value:empty::after {
+    content: 'No disponible';
+    color: var(--color-dark-gray);
+    font-style: italic;
+  }
+
