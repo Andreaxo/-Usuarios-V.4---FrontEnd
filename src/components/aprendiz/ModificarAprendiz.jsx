@@ -5,26 +5,25 @@ import '../../styles/Aprendiz/StyleModificarAprendiz.css';
 import { GoChevronLeft } from "react-icons/go";
 import { PiPencilSimpleLineFill } from "react-icons/pi";
 
-
 const TIPOS_DOCUMENTO = [
     { value: "Cédula de ciudadanía", label: "Cédula de ciudadanía" },
     { value: "Tarjeta de identidad", label: "Tarjeta de identidad" },
     { value: "Cédula de extranjería", label: "Cédula de extranjería" }
-  ];
+];
   
-  const CENTROS_FORMACION = [
+const CENTROS_FORMACION = [
     { value: "Centro Atención Sector Agropecuario", label: "Centro Atención Sector Agropecuario" },
     { value: "Centro de Diseño e Innovación Tecnológica Industrial", label: "Centro de Diseño e Innovación Tecnológica Industrial" },
     { value: "Centro de comercio y servicios", label: "Centro de comercio y servicios" }
-  ];
+];
   
-  const PROGRAMAS_FORMACION = [
+const PROGRAMAS_FORMACION = [
     { value: "Análisis y desarrollo de software", label: "Análisis y desarrollo de software" },
     { value: "Multimedia", label: "Multimedia" },
     { value: "Infraestructura", label: "Infraestructura" }
-  ];
+];
 
-  // Función auxiliar para formatear la fecha
+// Función auxiliar para formatear la fecha
 const formatearFechaParaInput = (fechaString) => {
   if (!fechaString) return '';
   
@@ -46,10 +45,10 @@ const formatearFechaParaInput = (fechaString) => {
   return fecha.toISOString().split('T')[0];
 };
 
-
 export const ModificarAprendiz = ({ onClose, expertData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [hasChanges, setHasChanges] = useState(false);
   
   // Asegurarse de que el ID se capture correctamente
   const [formData, setFormData] = useState({
@@ -62,13 +61,11 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
     birthdate: formatearFechaParaInput(expertData?.birthdate) || "",
     documentType: expertData.documentType,
     documentNumber: expertData.documentNumber,
-    email: expertData.documentNumber,
+    email: expertData.email,  // Fixed: was using documentNumber instead of email
     phone: expertData.phone,
     programName: expertData?.programName,
     indexCourse: expertData.indexCourse,
     strategyCompetition: expertData.strategyCompetition,
-    
-
   });
 
   const dataToSend = {
@@ -87,7 +84,7 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
     formationCenter: formData.formationCenter,
     competitionName: formData.competitionName,
     strategyCompetition: formData.strategyCompetition
-};
+  };
 
   // Actualizar useEffect para manejar mejor el ID
   useEffect(() => {
@@ -98,8 +95,7 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
             birthdate: formatearFechaParaInput(expertData.birthdate)
         }));
     }
-}, [expertData]);
-  console.log(expertData)
+  }, [expertData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -107,13 +103,13 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
       ...prev,
       [name]: value
     }));
+    setHasChanges(true);  // Mark that changes have been made
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    window.location.reload();
     
- if (!formData.id) {
+    if (!formData.id) {
       message.error('ID no encontrado');
       return;
     }
@@ -134,9 +130,7 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
       
       if (response.data) {
         message.success("Aspirante modificado exitosamente");
-        if (onClose) {
-          onClose();
-        }
+        onClose(true);  // Pass true to indicate changes were made
       }
 
     } catch (error) {
@@ -193,7 +187,7 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
     <div className="crear-experto">
         <button 
           type="button" 
-          onClick={onClose} 
+          onClick={() => onClose(false)} 
           className="submit-button-aprendiz"
         >
          <GoChevronLeft /> Volver atrás
@@ -255,31 +249,28 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
           name: "competitionName", 
           placeholder: "Habilidad" 
         })}
+      </form>
 
-          </form>
+      <div className="button-container">
+        <button 
+          type="submit" 
+          className="select-aprendiz-button"
+          disabled={isLoading}
+          onClick={() => onClose(false)} 
+        >
+          {isLoading ? "Modificando..." : "Seleccionar competidor"}
+        </button>
 
-
-        <div className="button-container">
-  <button 
-    type="submit" 
-    className="select-aprendiz-button"
-    disabled={isLoading}
-    onClick={onClose} 
-  >
-    {isLoading ? "Modificando..." : "Seleccionar competidor"}
-  </button>
-
-  <button 
-    type="submit" 
-    className="submit-button-save"
-    disabled={isLoading}
-    onClick={handleSubmit}
-  >
-    <PiPencilSimpleLineFill /> 
-    {isLoading ? "Modificando..." : "Guardar"}
-  </button>
-</div>
-
+        <button 
+          type="submit" 
+          className="submit-button-save"
+          disabled={isLoading}
+          onClick={handleSubmit}
+        >
+          <PiPencilSimpleLineFill /> 
+          {isLoading ? "Modificando..." : "Guardar"}
+        </button>
+      </div>
     </div>
   );
 };

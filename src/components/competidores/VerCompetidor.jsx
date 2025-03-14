@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { message } from "antd";
 import { IoCloseOutline } from "react-icons/io5";
-
+import { PiPencilSimpleLineFill } from "react-icons/pi";
+import { ModificarCompetidor } from '../competidores/ModificarCompetidor';
 import '../../styles/Competidores/StyleVerCompetidor.css';
 
 // Constantes de datos
@@ -56,14 +57,8 @@ const formatearFechaParaInput = (fechaString) => {
 export const VerCompetidor = ({ onClose, expertData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
-  const [documentos, setDocumentos] = useState({
-    documentoIdentidad: null,
-    hojaVida: null,
-    certificadoMedico: null
-  });
-
   const competidorRef = useRef(null);
+  const [showModificar, setShowModificar] = useState(false);
   
   const [formData, setFormData] = useState({
     id: expertData?.id || '',
@@ -88,8 +83,7 @@ export const VerCompetidor = ({ onClose, expertData }) => {
     bossEmail: expertData?.bossEmail || '',
     bossPhone: expertData?.bossPhone || '',
     competitionName: expertData?.competitionName || '',
-    strategyCompetition: expertData?.strategyCompetition || '',
-    habilidad: expertData?.habilidad || ''
+    strategyCompetition: expertData?.strategyCompetition || ''
   });
 
   useEffect(() => {
@@ -110,119 +104,36 @@ export const VerCompetidor = ({ onClose, expertData }) => {
     }));
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    if (files.length > 0) {
-      setDocumentos(prev => ({
-        ...prev,
-        [name]: files[0]
-      }));
-    }
-  };
-
-  const togglePopup = () => {
-    setShowPopup(!showPopup);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!formData.id) {
-      message.error('ID no encontrado');
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
+  // Función para el eliminar
+  const handleDeleteCompetidor = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/clientes/${formData.id}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-      
-      if (response.data) {
-        message.success("Competidor consultado exitosamente");
-        if (onClose) {
-          onClose();
-        }
-      }
+      setIsLoading(true);
+      await axios.delete(`http://localhost:3000/api/clientes/${formData.id}`);
+      message.success("Competidor eliminado exitosamente");
+      // Después de borrar, se cierra este componente y se indica que se hicieron cambios
+      onClose(null, true);
     } catch (error) {
-      console.error('Error al consultar:', error);
-      message.error(
-        error.response?.data?.message || 
-        'Error al consultar el competidor'
-      );
+      console.error("Error deleting competitor:", error);
+      message.error("Error al eliminar el competidor");
     } finally {
       setIsLoading(false);
     }
   };
-
-  const handleUploadDocuments = async (e) => {
-    e.preventDefault();
-    
-    // Verificar que al menos un documento haya sido seleccionado
-    if (!documentos.documentoIdentidad && !documentos.hojaVida && !documentos.certificadoMedico) {
-      message.warning('Por favor seleccione al menos un documento para subir');
-      return;
-    }
-    
-    setIsLoading(true);
-    
-    // Crear un FormData para enviar los archivos
-    const formDataToSend = new FormData();
-    if (documentos.documentoIdentidad) {
-      formDataToSend.append('documentoIdentidad', documentos.documentoIdentidad);
-    }
-    if (documentos.hojaVida) {
-      formDataToSend.append('hojaVida', documentos.hojaVida);
-    }
-    if (documentos.certificadoMedico) {
-      formDataToSend.append('certificadoMedico', documentos.certificadoMedico);
-    }
-    formDataToSend.append('competidorId', formData.id);
-    
-    try {
-      // Simulamos la carga (reemplazar con llamada API real)
-      setTimeout(() => {
-        message.success('Documentos subidos exitosamente');
-        setIsLoading(false);
-        togglePopup();
-      }, 1500);
-      
-      // EN ESTE PUNTO FLATA QUE ANDRÉS COLOQUE SU ENDPOINT DE DOCUMENTOS
-      
-      const response = await axios.post(
-        'http://localhost:3000/api/documentos/upload',
-        formDataToSend,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }
-      );
-      
-      if (response.data) {
-        message.success('Documentos subidos exitosamente');
-        togglePopup();
-      }
-      
-    } catch (error) {
-      console.error('Error al subir documentos:', error);
-      message.error(
-        error.response?.data?.message || 
-        'Error al subir los documentos'
-      );
-    } finally {
-      setIsLoading(false);
+  
+  // Manejador para abrir el componente de modificación
+  const handleModificar = () => {
+    setShowModificar(true);
+  };
+  
+  // Manejador para cuando se completa la modificación
+  const handleModificacionCompletada = (updatedData, changed = false) => {
+    setShowModificar(false);
+    // Si hubo cambios, cierra también el componente VerCompetidor y solicita actualización
+    if (changed) {
+      onClose(updatedData, true);
     }
   };
-
+  
   useEffect(() => {
     if (competidorRef.current) {
       competidorRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -275,30 +186,19 @@ export const VerCompetidor = ({ onClose, expertData }) => {
     </div>
   );
 
-  // Componente FileInputField para el popup
-  const FileInputField = ({ label, name, accept = ".pdf,.doc,.docx" }) => (
-    <div className="document-upload-field">
-      <label>{label}</label>
-      <input
-        type="file"
-        name={name}
-        onChange={handleFileChange}
-        accept={accept}
-        className="document-file-input"
+  // Si se está mostrando el componente ModificarCompetidor, renderizarlo
+  if (showModificar) {
+    return (
+      <ModificarCompetidor 
+        onClose={handleModificacionCompletada} 
+        expertData={formData} 
       />
-      {documentos[name] && (
-        <p className="selected-file">
-          {documentos[name].name}
-        </p>
-      )}
-    </div>
-  );
+    );
+  }
 
   return (
     <div ref={competidorRef} className="competidor-container">
-
       <h1 className="competidor-titulo">
-
         <span>Competidor: </span>
         <strong>{formData.name} {formData.lastName}</strong>
       </h1>
@@ -358,6 +258,13 @@ export const VerCompetidor = ({ onClose, expertData }) => {
             value={formData.bloodType} 
           />
           
+          <InputField 
+            label="Habilidad" 
+            name="strategyCompetition" 
+            value={formData.strategyCompetition} 
+            onChange={handleChange}
+          />
+
           <SelectField 
             label="Ficha" 
             name="indexCourse" 
@@ -384,11 +291,6 @@ export const VerCompetidor = ({ onClose, expertData }) => {
             value={formData.documentDateOfissue} 
           />
           
-          <InputField 
-            label="Habilidad" 
-            name="habilidad" 
-            value={formData.habilidad} 
-          />
         </div>
       </div>
       
@@ -459,74 +361,31 @@ export const VerCompetidor = ({ onClose, expertData }) => {
         </div>
       </div>
 
-
-      <div className="botones-container">
-      <button 
-         onClick={onClose} 
-         className="boton-accion boton-cancelar"
-          >
-           <IoCloseOutline />
-           Cancelar
-            </button>
-
-        <button className="boton-accion boton-subir" onClick={togglePopup}>
-          <span>Subir documentación</span>
+      <div className="botones-container-competidor">
+        <button 
+          onClick={() => onClose(null, false)} 
+          className="boton-cancelar-competidor"
+        >
+          <IoCloseOutline />
+          Cancelar
         </button>
         
-        <button className="boton-accion boton-modificar">
-          <span>Modificar</span>
+        <button 
+          className="boton-modificar-competidor"
+          onClick={handleModificar}
+        >
+          <PiPencilSimpleLineFill/>
+          Modificar
         </button>
         
-        <button className="boton-accion boton-eliminar">
-          Eliminar Competidor
+        <button 
+          className="boton-eliminar-competidor"
+          onClick={handleDeleteCompetidor}
+          disabled={isLoading}
+        >
+          {isLoading ? "Eliminando..." : "Eliminar Competidor"}
         </button>
       </div>
-
-      {showPopup && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <h2>Subir Documentación</h2>
-            <p>Por favor seleccione los archivos para el competidor <strong>{formData.name} {formData.lastName}</strong></p>
-            
-            <form onSubmit={handleUploadDocuments} className="document-upload-form">
-              <FileInputField 
-                label="Documento de Identidad" 
-                name="documentoIdentidad"
-                accept=".pdf,.jpg,.jpeg,.png"
-              />
-              
-              <FileInputField 
-                label="Hoja de Vida" 
-                name="hojaVida" 
-              />
-              
-              <FileInputField 
-                label="Certificado Médico" 
-                name="certificadoMedico" 
-              />
-              
-              <div className="popup-buttons">
-                <button 
-                  type="button"
-                  onClick={togglePopup}
-                  className="boton-accion boton-cancelar"
-                >
-                  Cancelar
-                </button>
-
-
-                <button 
-                  type="submit"
-                  className="boton-accion boton-subir"
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Subiendo...' : 'Subir Documentos'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

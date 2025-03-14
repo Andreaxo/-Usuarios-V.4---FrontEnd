@@ -1,4 +1,4 @@
-import { Table, Input, Button, Space, Popconfirm, Modal, message } from "antd";
+import { Table, Input, Button, Space, Popconfirm, message } from "antd";
 import { SearchOutlined, EditOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
@@ -16,20 +16,16 @@ export const ListadoCompetidor = () => {
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
 
+    const [refreshTrigger, setRefreshTrigger] = useState(0); 
     const [selectedAprendiz, setSelectedAprendiz] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
-    const [isModalView, setIsModalView] = useState(false);
+
+    // Estado para controlar la visualización de los componentes
+    const [showCrearAprendiz, setShowCrearAprendiz] = useState(false);
+    const [showModificarCompetidor, setShowModificarCompetidor] = useState(false);
+    const [showVerCompetidor, setShowVerCompetidor] = useState(false);
+
     const [selectedCompetitor, setSelectedCompetitor] = useState(null);
     const competidorSectionRef = useRef(null);
-
-    const handleVerCompetidor = (competidor) => {
-        setSelectedCompetitor(competidor);
-        setIsModalView(true);
-        setTimeout(() => {
-            competidorSectionRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
-    };
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
         confirm();
@@ -89,11 +85,26 @@ export const ListadoCompetidor = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button icon={<EditOutlined />} onClick={() => { setSelectedAprendiz(record); setIsModalOpenEdit(true); }} />
-                    <Popconfirm title="¿Eliminar este competidor?" onConfirm={() => handleDelete(record.id)}>
+                    <Button 
+                        icon={<EditOutlined />} 
+                        onClick={() => { 
+                            setSelectedCompetitor(record); 
+                            setShowModificarCompetidor(true); 
+                        }} 
+                    />
+                    <Popconfirm 
+                        title="¿Eliminar este competidor?" 
+                        onConfirm={() => handleDelete(record.id)}
+                    >
                         <Button danger icon={<DeleteOutlined />} />
                     </Popconfirm>
-                    <Button icon={<EyeOutlined />} onClick={() => handleVerCompetidor(record)} />
+                    <Button 
+                        icon={<EyeOutlined />} 
+                        onClick={() => { 
+                            setSelectedCompetitor(record); 
+                            setShowVerCompetidor(true); 
+                        }} 
+                    />
                 </Space>
             ),
         },
@@ -106,7 +117,12 @@ export const ListadoCompetidor = () => {
             const mainDataArray = response.data.body[0];
             const aprendices = mainDataArray.filter(usuario => usuario.rol === 'Competidor');
             setDataSource(aprendices.map(usuario => ({
-                ...usuario, key: usuario.id, nombre: usuario.name, apellido: usuario.lastName, habilidad: usuario.competitionName, centro: usuario.formationCenter
+                ...usuario, 
+                key: usuario.id, 
+                nombre: usuario.name, 
+                apellido: usuario.lastName, 
+                habilidad: usuario.competitionName, 
+                centro: usuario.formationCenter
             })));
         } catch (error) {
             message.error('Error al cargar la lista de aprendices');
@@ -115,7 +131,22 @@ export const ListadoCompetidor = () => {
         }
     };
 
-    useEffect(() => { fetchCompetidor(); }, []);
+    useEffect(() => { 
+        fetchCompetidor(); 
+    }, [refreshTrigger]);
+
+    // Función para manejar el cierre de los componentes
+    const handleComponentClose = (updatedData, changed) => {
+        // Cerrar todos los componentes
+        setShowCrearAprendiz(false);
+        setShowModificarCompetidor(false);
+        setShowVerCompetidor(false);
+        
+        // Si hubo cambios, actualizar la lista
+        if (changed) {
+            setRefreshTrigger(prev => prev + 1);
+        }
+    };
 
     return (
         <>
@@ -135,16 +166,38 @@ export const ListadoCompetidor = () => {
                         `${range[0]}-${range[1]} de ${total} competidores`,
                 }}
                 scroll={{ x: true }}
-                style={{ boxShadow: 'rgba(48, 48, 170, 0.2) 0px 7px 29px 0px',
+                style={{ 
+                    boxShadow: 'rgba(48, 48, 170, 0.2) 0px 7px 29px 0px',
                     margin: '0',
                     borderRadius: '10px',
-                    
                 }}
                 rowClassName="ant-table-row"
-            ></Table>
-            {isModalOpen && <div ref={competidorSectionRef}><CrearAprendiz onClose={() => setIsModalOpen(false)} /></div>}
-            {isModalOpenEdit && <div ref={competidorSectionRef}><ModificarCompetidor onClose={() => setIsModalOpenEdit(false)} expertData={selectedAprendiz} /></div>}
-            {isModalView && <div ref={competidorSectionRef}><VerCompetidor onClose={() => setIsModalView(false)} expertData={selectedCompetitor} /></div>}
+            />
+            
+            {/* Renderizado condicional de componentes */}
+            {showCrearAprendiz && (
+                <div ref={competidorSectionRef}>
+                    <CrearAprendiz onClose={handleComponentClose} />
+                </div>
+            )}
+            
+            {showModificarCompetidor && selectedCompetitor && (
+                <div ref={competidorSectionRef}>
+                    <ModificarCompetidor 
+                        onClose={handleComponentClose} 
+                        expertData={selectedCompetitor} 
+                    />
+                </div>
+            )}
+            
+            {showVerCompetidor && selectedCompetitor && (
+                <div ref={competidorSectionRef}>
+                    <VerCompetidor 
+                        onClose={handleComponentClose} 
+                        expertData={selectedCompetitor} 
+                    />
+                </div>
+            )}
         </div>
         </>
     );

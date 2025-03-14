@@ -120,12 +120,7 @@
     margin-bottom: 1rem;
   }
   
-  .documentos-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
+
   
   .column {
     display: flex;
@@ -173,30 +168,39 @@
   }
   
   /* Estilos para los botones */
-  .botones-container {
+  .botones-container-competidor {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 2rem;
   }
   
-  .boton-accion {
+ .boton-modificar-competidor {
+    background-color: var(--color-black);
+    color: var(--color-green);
     padding: 1rem;
     border-radius: 1rem;
-    border: solid 2px black;
+    border: solid 1px black;
     cursor: pointer;
-    font-weight: var(--font-weight-subtitle);
   }
   
-  .boton-subir, .boton-modificar {
-    background-color: var(--color-green);
-    color: white;
-  }
-  
-  .boton-eliminar {
+  .boton-eliminar-competidor {
     background-color: white;
-    border: 2px solid red;
+    border: 1px solid red;
     color: red;
+    padding: 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+  }
+
+  
+  .boton-cancelar-competidor {
+    background-color: white;
+    color: rgb(0, 0, 0);
+    padding: 1rem;
+    border-radius: 1rem;
+    border: solid 1px black;
+    cursor: pointer;
   }
   
   /* Estilos para el popup */

@@ -3,6 +3,7 @@ import { message } from "antd";
 import '../../styles/Aprendiz/StyleVerAprendiz.css';
 import { GoChevronLeft } from "react-icons/go";
 import { PiPencilSimpleLineFill } from "react-icons/pi";
+import { ModificarAprendiz } from "./ModificarAprendiz";
 
 const TIPOS_DOCUMENTO = [
   { value: "Cédula de ciudadanía", label: "Cédula de ciudadanía" },
@@ -25,6 +26,10 @@ const formatearFechaParaInput = (fechaString) => {
 
 export const VerAprendiz = ({ onClose, expertData }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [showModificarPopup, setShowModificarPopup] = useState(false);
+
+
+
   const [formData, setFormData] = useState({
     id: expertData?.id || '',
     name: expertData?.name || "",
@@ -56,6 +61,11 @@ export const VerAprendiz = ({ onClose, expertData }) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+
+    // Función para mostrar el popup de ModificarExperto
+    const handleModificarAprendiz = () => {
+      setShowModificarPopup(true);
+    };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,6 +113,15 @@ export const VerAprendiz = ({ onClose, expertData }) => {
 
   return (
     <div className="crear-experto">
+            {showModificarPopup ? (
+        <div className="popup-overlay">
+          <ModificarAprendiz 
+            onClose={(updatedData) => onClose(updatedData, true)} 
+            expertData={formData} 
+          />
+        </div>
+      ) : (
+    <>
       <button type="button" onClick={onClose} className="submit-button-aprendiz"><GoChevronLeft />Volver atrás</button>
     
     
@@ -133,11 +152,13 @@ export const VerAprendiz = ({ onClose, expertData }) => {
       <button type="button" onClick={onClose} className="select-button-aprendiz">
       {isLoading ? "Seleccionando..." : "Seleccionar a competidor"}
       </button>
-      <button type="button" onClick={onClose} className="edit-button-aprendiz">
+      <button type="button" onClick={handleModificarAprendiz} className="edit-button-aprendiz">
         <PiPencilSimpleLineFill/>
       {isLoading ? "Modificando..." : "Modificar"}
       </button>
     </div>
+    </>
+      )}
     </div>
   );
 };

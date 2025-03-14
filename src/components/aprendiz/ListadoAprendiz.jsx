@@ -168,12 +168,35 @@ export const ListadoAprendiz = () => {
         }
     };
 
+    const handleCloseCrearAprendiz = (data, hasChanges) => {
+        setIsModalOpen(false);
+        setSelectedAprendiz(null);
+        if (hasChanges) {
+            fetchAprendiz();
+        }
+      };
+    
+      const handleCloseVerAprendiz = (data, hasChanges) => {
+        setIsModalView(false);
+        setSelectedAprendiz(null);
+        if (hasChanges) {
+            fetchAprendiz();
+        }
+      };
+        
+      const handleCloseModificarAprendiz = (data, hasChanges) => {
+        setIsModalOpenEdit(false); // Corregido - estaba cerrando el modal de vista en lugar del de edición
+        setSelectedAprendiz(null);
+        if (hasChanges) {
+            fetchAprendiz();
+        }
+      };
+
     useEffect(() => {
         fetchAprendiz();
     }, []);
 
     return (
-        <>
             <div className="competitors-listing-container">
                 <div className="action-header-aprendiz">
                     <h1 className="main-title-aprendiz">Aspirantes</h1>
@@ -197,28 +220,22 @@ export const ListadoAprendiz = () => {
                     rowClassName="ant-table-row"
                 />
 
-                {isModalOpen && <CrearAprendiz onClose={() => setIsModalOpen(false)} />}
+                {isModalOpen && <CrearAprendiz onClose={handleCloseCrearAprendiz} />}
                 
                 {isModalOpenEdit && (
                     <ModificarAprendiz
-                        onClose={() => {
-                            setIsModalOpenEdit(false);
-                            setSelectedAprendiz(null);
-                        }} 
+                    onClose={handleCloseModificarAprendiz}
                         expertData={selectedAprendiz}
                     />
                 )}
                 
                 {isModalView && (
                     <VerAprendiz 
-                        onClose={() => {
-                            setIsModalView(false);
-                            setSelectedAprendiz(null);
-                        }} 
+                    onClose={handleCloseVerAprendiz}
                         expertData={selectedAprendiz}
                     />
                 )}
             </div>
-        </>
+       
     );
 };

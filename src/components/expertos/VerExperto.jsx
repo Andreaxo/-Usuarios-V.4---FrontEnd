@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { message } from "antd";
 import '../../styles/Expertos/StyleVerExperto.css';
 import { GoChevronLeft } from "react-icons/go";
 import { PiPencilSimpleLineFill } from "react-icons/pi";
@@ -61,6 +60,7 @@ const CENTROS_FORMACION = [
 export const VerExperto = ({ onClose, expertData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showModificarPopup, setShowModificarPopup] = useState(false);
   
   // Asegurarse de que el ID se capture correctamente
   const [formData, setFormData] = useState({
@@ -80,7 +80,6 @@ export const VerExperto = ({ onClose, expertData }) => {
     bloodType: expertData?.bloodType || "",
     dietPreferences: expertData?.dietPreferences || "",
     competitionName: expertData?.competitionName || "",
-
   });
 
   // Actualizar useEffect para manejar mejor el ID
@@ -117,24 +116,25 @@ export const VerExperto = ({ onClose, expertData }) => {
     }));
   };
 
+  // Función para mostrar el popup de ModificarExperto
   const handleModificarExperto = () => {
-  // Set loading state
-  setIsLoading(true);
-  
-  // Call the ModificarExperto function with the required parameters
-  ModificarExperto({ 
-    onClose: () => {
+    setShowModificarPopup(true);
+  };
+
+  //Función para el eliminar
+  const handleDeleteExperto = async () => {
+    try {
+      setIsLoading(true);
+      await axios.delete(`http://localhost:3000/api/clientes/${formData.id}`);
+      // Después de borra, se cierra este componente y se refresca la lista
+    
+    } catch (error) {
+      console.error("Error deleting expert:", error);
+      setError("Error al eliminar el experto");
+    } finally {
       setIsLoading(false);
-      // Additional logic after editing
-    },
-    expertData: formData
-  })
-  .catch(error => {
-    console.error("Error al modificar experto:", error);
-    setIsLoading(false);
-    setError("Error al modificar experto");
-  });
-};
+    }
+  };
 
   const renderSelect = ({ label, name, options }) => (
     <div className="expert-input-group">
@@ -174,84 +174,94 @@ export const VerExperto = ({ onClose, expertData }) => {
 
   return (
     <div className="view-expert-container">
-        <button type="button" onClick={onClose} className="back-button-expert"><GoChevronLeft />Volver atrás</button>
-      <h1 className="expert-title"><b>Experto Regional: </b> {formData.name} {formData.lastName}</h1>
-      
-      <form className="expert-form">
+      {showModificarPopup ? (
+        <div className="popup-overlay">
+          <ModificarExperto 
+            onClose={(updatedData) => onClose(updatedData, true)} 
+            expertData={formData} 
+          />
+        </div>
+      ) : (
+        <>
+          <button type="button" onClick={onClose} className="back-button-expert"><GoChevronLeft />Volver atrás</button>
+          <h1 className="expert-title"><b>Experto Regional: </b> {formData.name} {formData.lastName}</h1>
+          
+          <form className="expert-form">
+            <input 
+              type="hidden" 
+              name="id" 
+              value={formData.id} 
+            />
 
-      <input 
-          type="hidden" 
-          name="id" 
-          value={formData.id} 
-        />
+            {renderInput({ name: "name", placeholder: "Nombre" })}
+            {renderInput({ name: "lastName", placeholder: "Apellido" })}
+            {renderInput({ name: "rol", placeholder: "Rol" })}
+            {renderInput({ 
+              type: "date",
+              name: "birthdate", 
+              placeholder: "Fecha de nacimiento" 
+            })}
+            
+            {renderSelect({
+              label: "Tipo de documento",
+              name: "documentType",
+              options: TIPOS_DOCUMENTO
+            })}
+            
+            {renderInput({ 
+              name: "documentNumber", 
+              placeholder: "Número de documento" 
+            })}
+            {renderInput({ 
+              name: "email", 
+              placeholder: "Correo electrónico",
+              type: "email"
+            })}
+            {renderInput({ 
+              name: "phone", 
+              placeholder: "Número de teléfono" 
+            })}
+            
+            {renderSelect({
+              label: "Tipo de Sangre",
+              name: "bloodType",
+              options: TIPOS_SANGRE
+            })}
+            
+            {renderSelect({
+              label: "Preferencias alimentarias",
+              name: "dietPreferences",
+              options: PREFERENCIAS_ALIMENTARIAS
+            })}
+            
+            {renderInput({ name: "area", placeholder: "Área" })}
+            
+            {renderSelect({
+              label: "Centro de formación",
+              name: "formationCenter",
+              options: CENTROS_FORMACION
+            })}
+            
+            {renderInput({ 
+              name: "senaVinculation", 
+              placeholder: "Vinculación SENA" 
+            })}
+            {renderInput({ name: "competitionName", placeholder: "Habilidad" })}
 
-        {renderInput({ name: "name", placeholder: "Nombre" })}
-        {renderInput({ name: "lastName", placeholder: "Apellido" })}
-        {renderInput({ name: "rol", placeholder: "Rol" })}
-        {renderInput({ 
-          type: "date",
-          name: "birthdate", 
-          placeholder: "Fecha de nacimiento" 
-        })}
-        
-        {renderSelect({
-          label: "Tipo de documento",
-          name: "documentType",
-          options: TIPOS_DOCUMENTO
-        })}
-        
-        {renderInput({ 
-          name: "documentNumber", 
-          placeholder: "Número de documento" 
-        })}
-        {renderInput({ 
-          name: "email", 
-          placeholder: "Correo electrónico",
-          type: "email"
-        })}
-        {renderInput({ 
-          name: "phone", 
-          placeholder: "Número de teléfono" 
-        })}
-        
-        {renderSelect({
-          label: "Tipo de Sangre",
-          name: "bloodType",
-          options: TIPOS_SANGRE
-        })}
-        
-        {renderSelect({
-          label: "Preferencias alimentarias",
-          name: "dietPreferences",
-          options: PREFERENCIAS_ALIMENTARIAS
-        })}
-        
-        {renderInput({ name: "area", placeholder: "Área" })}
-        
-        {renderSelect({
-          label: "Centro de formación",
-          name: "formationCenter",
-          options: CENTROS_FORMACION
-        })}
-        
-        {renderInput({ 
-          name: "senaVinculation", 
-          placeholder: "Vinculación SENA" 
-        })}
-        {renderInput({ name: "competitionName", placeholder: "Habilidad" })}
-
-        <br/>
-      
-      <div className="button-expertos">
-        <button type="button"  onClick={handleModificarExperto} disabled={isLoading} className="edit-expert-button">
-          <PiPencilSimpleLineFill/>
-          {isLoading ? "Modificando..." : "Modificar"}
-          </button>
-        <button type="button" disabled={isLoading} className="delete-expert-button">
-          {isLoading ? "Eliminando..." : "Eliminar Experto"}
-          </button>
-          </div>
-      </form>
+            <br/>
+          
+            <div className="button-expertos">
+              <button type="button" onClick={handleModificarExperto} disabled={isLoading} className="edit-expert-button">
+                <PiPencilSimpleLineFill/>
+                {isLoading ? "Modificando..." : "Modificar"}
+              </button>
+              <button type="button" onClick={handleDeleteExperto} disabled={isLoading} className="delete-expert-button">
+                {isLoading ? "Eliminando..." : "Eliminar Experto"}
+              </button>
+            </div>
+          </form>
+        </>
+      )}
     </div>
   );
 };

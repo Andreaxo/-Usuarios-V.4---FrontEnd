@@ -19,14 +19,9 @@ export const ListadoExpertos = () => {
 
     const [selectedExpert, setSelectedExpert] = useState(null);
 
-
-    //Modal
+    // Modales
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    //Modal
     const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
-
-    //Modal
     const [isModalView, setIsModalView] = useState(false);
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -39,7 +34,6 @@ export const ListadoExpertos = () => {
         clearFilters();
         setSearchText('');
     };
-
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
@@ -77,7 +71,7 @@ export const ListadoExpertos = () => {
           message.error('Error al eliminar el experto');
           console.error('Error:', error);
       }
-      };
+    };
 
     const columns = [
       {
@@ -133,9 +127,7 @@ export const ListadoExpertos = () => {
                     onClick={() => {
                         setSelectedExpert(record);
                         setIsModalView(true);
-                    }
-                    }
-                    
+                    }}
                 />
             </Space>
         ),
@@ -176,79 +168,88 @@ const fetchExpertos = async () => {
     }
 };
 
-    useEffect(() => {
+  // Corregimos los manejadores para cerrar los modales correctamente
+  const handleCloseCrearExperto = (data, hasChanges) => {
+    setIsModalOpen(false);
+    if (hasChanges) {
         fetchExpertos();
-    }, []);
+    }
+  };
 
-    return (
-<>
+  const handleCloseVerExperto = (data, hasChanges) => {
+    setIsModalView(false);
+    setSelectedExpert(null);
+    if (hasChanges) {
+        fetchExpertos();
+    }
+  };
+    
+  const handleCloseModificarExperto = (data, hasChanges) => {
+    setIsModalOpenEdit(false); // Corregido - estaba cerrando el modal de vista en lugar del de edición
+    setSelectedExpert(null);
+    if (hasChanges) {
+        fetchExpertos();
+    }
+  };
 
+  useEffect(() => {
+      fetchExpertos();
+  }, []);
 
-        <div className="listado-expertos-container">
-            <div className="header-actions" style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '1rem'
-            }}>
-        <div className="titulo_expertos">
-            <h2>Expertos </h2>
-        </div>
+  return (
+      <div className="listado-expertos-container">
+          <div className="header-actions" style={{ 
+              display: 'flex', 
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1rem'
+          }}>
+          <div className="titulo_expertos">
+              <h2>Expertos</h2>
+          </div>
 
+          <Button 
+              className="crearExperto"
+              onClick={() => setIsModalOpen(true)}
+              style={{border: 'solid black 1px'}}
+          >
+              Crear Experto
+          </Button>
+          </div>
 
-                <Button 
-                    className="crearExperto"
-                    onClick={() => setIsModalOpen(true)}
-                    style={{border: 'solid black 1px'}}
-                >
-                    Crear Experto
-                </Button>
-            </div>
+          <Table 
+              dataSource={dataSource} 
+              columns={columns} 
+              loading={loading}
+              
+              pagination={{
+                  pageSize: 10,
+                  showTotal: (total, range) => 
+                      `${range[0]}-${range[1]} de ${total} expertos`,
+              }}
+              scroll={{ x: true }}
+              style={{ boxShadow: 'rgba(48, 48, 170, 0.2) 0px 7px 29px 0px',
+                  margin: '0',
+                  borderRadius: '10px',
+              }}
+              rowClassName="ant-table-row"
+          />
 
-            <Table 
-                dataSource={dataSource} 
-                columns={columns} 
-                loading={loading}
-                
-                pagination={{
-                    pageSize: 10,
-                    showTotal: (total, range) => 
-                        `${range[0]}-${range[1]} de ${total} expertos`,
-                }}
-                scroll={{ x: true }}
-                style={{ boxShadow: 'rgba(48, 48, 170, 0.2) 0px 7px 29px 0px',
-                    margin: '0',
-                    borderRadius: '10px',
-                    
-                }}
-                rowClassName="ant-table-row"
-                
-            ></Table>
-
-            {isModalOpen && <CrearExperto onClose={() => setIsModalOpen(false)}/> }
-            {isModalOpenEdit && (
-        <ModificarExperto 
-          onClose={() => {
-            setIsModalOpenEdit(false);
-            setSelectedExpert(null);  // Limpia el experto al cerrar
-          }} 
-          expertData={selectedExpert}  // Pasa los datos aquí
-             />
+          {isModalOpen && <CrearExperto onClose={handleCloseCrearExperto} />}
+          
+          {isModalOpenEdit && (
+              <ModificarExperto 
+                  onClose={handleCloseModificarExperto}
+                  expertData={selectedExpert}
+              />
           )}
-        
-        {isModalView && (
-        <VerExperto 
-          onClose={() => {
-            setIsModalView(false);
-            setSelectedExpert(null);  // Limpia el experto al cerrar
-          }} 
-          expertData={selectedExpert}  // Pasa los datos aquí
-             />
+          
+          {isModalView && (
+              <VerExperto 
+                  onClose={handleCloseVerExperto}
+                  expertData={selectedExpert}
+              />
           )}
-           
-            
-
-        </div>
-        </>
-    );
+      </div>
+  );
 };

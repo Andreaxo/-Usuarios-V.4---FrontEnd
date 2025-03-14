@@ -1,32 +1,31 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
-import { message, Select } from "antd";
+import { message } from "antd";
 import { PiPencilSimpleLineFill } from "react-icons/pi";
 import '../../styles/Competidores/StyleModificarCompetidor.css';
 
 const TIPOS_DOCUMENTO = [
-    { value: "Cédula de ciudadanía", label: "Cédula de ciudadanía" },
-    { value: "Tarjeta de identidad", label: "Tarjeta de identidad" },
-    { value: "Cédula de extranjería", label: "Cédula de extranjería" }
-  ];
-  
-  const CENTROS_FORMACION = [
-    { value: "Centro Atención Sector Agropecuario", label: "Centro Atención Sector Agropecuario" },
-    { value: "Centro de Diseño e Innovación Tecnológica Industrial", label: "Centro de Diseño e Innovación Tecnológica Industrial" },
-    { value: "Centro de comercio y servicios", label: "Centro de comercio y servicios" }
-  ];
-  
-  const TIPOS_SANGRE = [
-    { value: "A+", label: "A+" },
-    { value: "A-", label: "A-" },
-    { value: "B+", label: "B+" },
-    { value: "B-", label: "B-" },
-    { value: "O+", label: "O+" },
-    { value: "O-", label: "O-" },
-    { value: "AB+", label: "AB+" },
-    { value: "AB-", label: "AB-" }
+  { value: "Cédula de ciudadanía", label: "Cédula de ciudadanía" },
+  { value: "Tarjeta de identidad", label: "Tarjeta de identidad" },
+  { value: "Cédula de extranjería", label: "Cédula de extranjería" }
 ];
 
+const CENTROS_FORMACION = [
+  { value: "Centro Atención Sector Agropecuario", label: "Centro Atención Sector Agropecuario" },
+  { value: "Centro de Diseño e Innovación Tecnológica Industrial", label: "Centro de Diseño e Innovación Tecnológica Industrial" },
+  { value: "Centro de comercio y servicios", label: "Centro de comercio y servicios" }
+];
+
+const TIPOS_SANGRE = [
+  { value: "A+", label: "A+" },
+  { value: "A-", label: "A-" },
+  { value: "B+", label: "B+" },
+  { value: "B-", label: "B-" },
+  { value: "O+", label: "O+" },
+  { value: "O-", label: "O-" },
+  { value: "AB+", label: "AB+" },
+  { value: "AB-", label: "AB-" }
+];
 
 const PREFERENCIAS_DIETA = [
   { value: "Normal", label: "Normal" },
@@ -46,25 +45,25 @@ const MODALIDAD_ETAPA = [
   { value: "Monitoría", label: "Monitoría" }
 ];
 
-  const PROGRAMAS_FORMACION = [
-    { value: "Análisis y desarrollo de software", label: "Análisis y desarrollo de software" },
-    { value: "Multimedia", label: "Multimedia" },
-    { value: "Infraestructura", label: "Infraestructura" }
-  ];
+const PROGRAMAS_FORMACION = [
+  { value: "Análisis y desarrollo de software", label: "Análisis y desarrollo de software" },
+  { value: "Multimedia", label: "Multimedia" },
+  { value: "Infraestructura", label: "Infraestructura" }
+];
 
-  // Función auxiliar para formatear la fecha
+// Función auxiliar para formatear la fecha
 const formatearFechaParaInput = (fechaString) => {
   if (!fechaString) return '';
   
   // Maneja cadenas de fecha ISO
   if (fechaString.includes('T')) {
-      const fecha = new Date(fechaString);
-      return fecha.toISOString().split('T')[0];
+    const fecha = new Date(fechaString);
+    return fecha.toISOString().split('T')[0];
   }
   
   // Si ya está en formato YYYY-MM-DD, devuélvela tal cual
   if (fechaString.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      return fechaString;
+    return fechaString;
   }
   
   // Para cualquier otro formato, intenta convertir a YYYY-MM-DD
@@ -116,7 +115,6 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
   const [error, setError] = useState(null);
   const competidorRef = useRef(null);
 
-
   //Para guardar los nombres y que no cambien cuando lo estoy modificando.
   const [nombreOriginal, setNombreOriginal] = useState('');
   const [apellidoOriginal, setApellidoOriginal] = useState('');
@@ -146,11 +144,12 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
     bossEmail: expertData?.bossEmail || '',
     bossPhone: expertData?.bossPhone || '',
     competitionName: expertData?.competitionName || '',
-    strategyCompetition: expertData?.strategyCompetition || null
+    strategyCompetition: expertData?.strategyCompetition || null,
+    habilidad: expertData?.habilidad || ''
   });
 
-   // Se crea una constante para entregar los datos que se necesitan -> FormData manda un dato extra que no permitía el cambio.
-   const dataToSend = {
+  // Se crea una constante para entregar los datos que se necesitan -> FormData manda un dato extra que no permitía el cambio.
+  const dataToSend = {
     id: formData.id,
     rol: formData.rol,
     password: formData.password,
@@ -160,7 +159,7 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
     documentNumber: formData.documentNumber,
     documentDateOfissue: formData.documentDateOfissue,
     email: formData.email,
-    birthdate: formData.birthdate,
+    birthdate: formatearFechaParaInput(formData?.birthdate),
     phone: formData.phone,
     area: formData.area,
     senaVinculation: formData.senaVinculation,
@@ -180,7 +179,7 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
     competitionName: formData.competitionName,
     photo_url: formData.photo_url,
     strategyCompetition: formData.strategyCompetition
-};
+  };
 
   useEffect(() => {
     if (expertData) {
@@ -193,7 +192,6 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
       }));
     }
   }, [expertData]);
-  console.log(expertData)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -205,7 +203,6 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    window.location.reload();
 
     if (!formData.id) {
       message.error('ID no encontrado');
@@ -228,11 +225,9 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
 
       if (response.data) {
         message.success("Competidor modificado exitosamente");
-        if (onClose) {
-          onClose();
-        }
+        // Notificar el cambio exitoso y enviar los datos actualizados
+        onClose(response.data, true);
       }
-
     } catch (error) {
       console.error('Error al modificar:', error);
       message.error(
@@ -242,6 +237,11 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCancel = () => {
+    // Cerrar sin cambios
+    onClose(null, false);
   };
 
   useEffect(() => {
@@ -257,6 +257,9 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
         <strong>{nombreOriginal} {apellidoOriginal}</strong>
       </h1>
       
+
+      <h2 className="etapa-titulo">Datos personales</h2>
+      <br/>
       <div className="grid-container">
         <div className="column">
           <InputField 
@@ -265,13 +268,23 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
             value={formData.name} 
             onChange={handleChange}
           />
-          <InputField 
-            label="Nombre Completo" 
-            name="lastName" 
-            value={formData.lastName} 
-            onChange={handleChange}
-          />
-          
+
+        <SelectField 
+          label="Tipo de documento" 
+          name="documentType" 
+          options={TIPOS_DOCUMENTO}
+          value={formData.documentType} 
+          onChange={handleChange}
+        />
+
+
+        <InputField 
+          label="Fecha de expedición de identificación" 
+          name="documentDateOfissue" 
+          type="date"
+          value={formData.documentDateOfissue} 
+          onChange={handleChange}
+        />
           <InputField 
             label="Correo electrónico" 
             name="email" 
@@ -279,26 +292,28 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
             onChange={handleChange}
           />
           
-          <InputField 
-            label="Fecha de nacimiento" 
-            name="birthdate" 
-            value={formData.birthdate} 
-            onChange={handleChange}
-          />
-          
-          <SelectField 
-            label="Programa de formación" 
-            name="programName" 
-            options={PROGRAMAS_FORMACION}
-            value={formData.programName} 
-            onChange={handleChange}
-          />
-          
+
           <SelectField 
             label="Centro de Formación" 
             name="formationCenter" 
             options={CENTROS_FORMACION}
             value={formData.formationCenter} 
+            onChange={handleChange}
+          />
+          
+
+          <InputField 
+            label="Ficha" 
+            name="indexCourse" 
+            value={formData.indexCourse} 
+            onChange={handleChange}
+          />
+          
+
+          <InputField 
+            label="Habilidad" 
+            name="strategyCompetition" 
+            value={formData.strategyCompetition} 
             onChange={handleChange}
           />
           
@@ -318,6 +333,35 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
         </div>
         
         <div className="column">
+        <InputField 
+            label="Apellido" 
+            name="lastName" 
+            value={formData.lastName} 
+            onChange={handleChange}
+          />
+
+        <InputField 
+          label="Número de documento" 
+          name="documentNumber" 
+          value={formData.documentNumber} 
+          onChange={handleChange}
+        />
+          <InputField 
+            label="Fecha de nacimiento" 
+            name="birthdate" 
+            type="date"
+            value={formData.birthdate} 
+            onChange={handleChange}
+          />
+
+          <SelectField 
+            label="Programa de formación" 
+            name="programName" 
+            options={PROGRAMAS_FORMACION}
+            value={formData.programName} 
+            onChange={handleChange}
+          />
+
           <SelectField 
             label="Tipo de sangre" 
             name="bloodType" 
@@ -326,12 +370,6 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
             onChange={handleChange}
           />
           
-          <InputField 
-            label="Ficha" 
-            name="indexCourse" 
-            value={formData.indexCourse} 
-            onChange={handleChange}
-          />
           
           <SelectField 
             label="Preferencia alimenticia" 
@@ -341,50 +379,11 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
             onChange={handleChange}
           />
           
-          <SelectField 
-            label="Estado de contrato(a)" 
-            name="hiringStatus" 
-            options={ESTADO_CONTRATACION} 
-            value={formData.hiringStatus} 
-            onChange={handleChange}
-          />
           
-          <InputField 
-            label="Fecha de expedición de identificación" 
-            name="documentDateOfissue" 
-            value={formData.documentDateOfissue} 
-            onChange={handleChange}
-          />
           
-          <InputField 
-            label="Habilidad" 
-            name="habilidad" 
-            value={formData.habilidad} 
-            onChange={handleChange}
-          />
         </div>
       </div>
       
-      <div className="documentos-grid">
-        <div className="column">
-          <SelectField 
-            label="Tipo de documento" 
-            name="documentType" 
-            options={TIPOS_DOCUMENTO}
-            value={formData.documentType} 
-            onChange={handleChange}
-          />
-        </div>
-        
-        <div className="column">
-          <InputField 
-            label="Número de documento" 
-            name="documentNumber" 
-            value={formData.documentNumber} 
-            onChange={handleChange}
-          />
-        </div>
-      </div>
 
       <h2 className="etapa-titulo">Modalidad de Etapa Productiva</h2>
       <br/>
@@ -392,10 +391,10 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
       <div className="grid-container">
         <div className="column">
           <SelectField 
-            label="Modalidad" 
-            name="productiveStageModality" 
-            options={MODALIDAD_ETAPA}
-            value={formData.productiveStageModality} 
+            label="Estado de contrato(a)" 
+            name="hiringStatus" 
+            options={ESTADO_CONTRATACION} 
+            value={formData.hiringStatus} 
             onChange={handleChange}
           />
           
@@ -407,14 +406,22 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
           />
           
           <InputField 
-            label="NIT Empresa" 
-            name="nit" 
-            value={formData.nit} 
+            label="Correo Jefe inmediato" 
+            name="bossEmail" 
+            value={formData.bossEmail} 
             onChange={handleChange}
           />
         </div>
         
         <div className="column">
+          <SelectField 
+            label="Modalidad" 
+            name="productiveStageModality" 
+            options={MODALIDAD_ETAPA}
+            value={formData.productiveStageModality} 
+            onChange={handleChange}
+          />
+          
           <InputField 
             label="Jefe inmediato" 
             name="immediateBossName" 
@@ -430,9 +437,9 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
           />
           
           <InputField 
-            label="Correo Jefe inmediato" 
-            name="bossEmail" 
-            value={formData.bossEmail} 
+            label="NIT Empresa" 
+            name="nit" 
+            value={formData.nit} 
             onChange={handleChange}
           />
         </div>
@@ -440,26 +447,24 @@ export const ModificarCompetidor = ({ onClose, expertData }) => {
 
       <br/>
       <div className="button-container">
-  <button 
-    type="submit" 
-    className="select-button-aprendiz"
-    disabled={isLoading}
-    onClick={onClose} 
-  >
-    {isLoading ? "Modificando..." : "Seleccionar competidor"}
-  </button>
+        <button 
+          type="button" 
+          className="select-button-aprendiz"
+          onClick={handleCancel} 
+        >
+          Cancelar
+        </button>
 
-  <button 
-    type="submit" 
-    className="submit-button-guardar"
-    disabled={isLoading}
-    onClick={handleSubmit}
-  >
-    <PiPencilSimpleLineFill /> 
-    {isLoading ? "Modificando..." : "Guardar"}
-  </button>
-  </div>
-
+        <button 
+          type="submit" 
+          className="submit-button-guardar"
+          disabled={isLoading}
+          onClick={handleSubmit}
+        >
+          <PiPencilSimpleLineFill /> 
+          {isLoading ? "Modificando..." : "Guardar"}
+        </button>
+      </div>
     </div>
   );
 };

@@ -4,7 +4,6 @@ import { message } from "antd";
 import '../../styles/Expertos/StyleModificarExperto.css';
 import { PiPencilSimpleLineFill } from "react-icons/pi";
 import { GoChevronLeft } from "react-icons/go";
-import { useNavigate } from "react-router-dom";
 
 const TIPOS_DOCUMENTO = [
   { value: "Cédula de ciudadanía", label: "Cédula de ciudadanía" },
@@ -60,7 +59,8 @@ const formatearFechaParaInput = (fechaString) => {
 export const ModificarExperto = ({ onClose, expertData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [hasChanges, setHasChanges] = useState(false);
+
   
   // Asegurarse de que el ID se capture correctamente
   const [formData, setFormData] = useState({
@@ -95,9 +95,7 @@ export const ModificarExperto = ({ onClose, expertData }) => {
     }
   }, [expertData]);
 
-  const Recargar = () => {
-    navigate('/')
-  }
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -109,7 +107,7 @@ export const ModificarExperto = ({ onClose, expertData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    window.location.reload();
+    // Eliminamos window.location.reload() para evitar la recarga completa de la página
     
     if (!formData.id) {
       message.error('ID no encontrado');
@@ -132,9 +130,8 @@ export const ModificarExperto = ({ onClose, expertData }) => {
       
       if (response.data) {
         message.success("Experto modificado exitosamente");
-        if (onClose) {
-          onClose();
-        }
+        // Notificamos que hubo cambios y cerramos el modal
+        onClose(formData, true);
       }
 
     } catch (error) {
@@ -148,15 +145,20 @@ export const ModificarExperto = ({ onClose, expertData }) => {
     }
   };
 
-  const handleDelete = async(id) => {
+  const handleDelete = async() => {
+    setIsLoading(true);
     try{
         await axios.delete(`http://localhost:3000/api/clientes/${formData.id}`);
         message.success('Experto eliminado exitosamente');
-        fetchExpertos(); // Recargar la lista
+        // Notificamos que hubo cambios y cerramos el modal
+        onClose(formData, true);
     } catch (error) {
         console.error('Error:', error);
+        message.error('Error al eliminar el experto');
+    } finally {
+      setIsLoading(false);
     }
-    };
+  };
 
   const renderSelect = ({ label, name, options }) => (
     <div className="view-expert-input-group">
@@ -197,13 +199,11 @@ export const ModificarExperto = ({ onClose, expertData }) => {
 
   return (
     <div className="view-expert-edit-container">
-      <button type="button" onClick={onClose} className="back-button-experto">
-        <GoChevronLeft />Volver atrás
-      </button>
+          <button type="button" onClick={() => onClose(null, false)} className="back-button-expert"><GoChevronLeft />Volver atrás</button>
 
-      <h1 className="expert-title-edit"><b>Experto Regional: </b> {formData.name} {formData.lastName}</h1>
+      <h1 className="expert-title-edit"><b>Modificar Experto Regional: </b> {formData.name} {formData.lastName}</h1>
       
-      <form onSubmit={handleSubmit} className="expert-form-edit">
+      <form onSubmit={handleSubmit} className="expert-form-edit"  >
 
         <input 
           type="hidden" 
