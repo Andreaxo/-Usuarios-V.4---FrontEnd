@@ -61,18 +61,30 @@ export const ModificarExperto = ({ onClose, expertData }) => {
   const [error, setError] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
 
-  
   // Asegurarse de que el ID se capture correctamente
   const [formData, setFormData] = useState({
-    id: expertData?.id || '',  // Cambiado de 0 a ''
+    id: expertData?.id || '',
     name: expertData?.name || "",
     lastName: expertData?.lastName || "",
+    rol: expertData?.rol || "",
+    documentType: expertData?.documentType || "",
+    documentNumber: expertData?.documentNumber || "",
+    documentDateOfissue: expertData?.documentDateOfissue || "",
+    email: expertData?.email || "",
+    birthdate: formatearFechaParaInput(expertData?.birthdate) || "",
+    phone: expertData?.phone || "",
+    area: expertData?.area || "",
+    senaVinculation: expertData?.senaVinculation || "",
+    formationCenter: expertData?.formationCenter || "",
+    bloodType: expertData?.bloodType || "",
+    dietPreferences: expertData?.dietPreferences || "",
+    competitionName: expertData?.competitionName || "",
   });
 
   // Actualizar useEffect para manejar mejor el ID
   useEffect(() => {
     if (expertData) {
-      console.log("ID recibido:", expertData.id); // Para debugging
+      console.log("ID recibido:", expertData.id);
       setFormData(prev => ({
         ...prev,
         id: expertData?.id || '', 
@@ -95,20 +107,201 @@ export const ModificarExperto = ({ onClose, expertData }) => {
     }
   }, [expertData]);
 
+  const [errors, setErrors] = useState({
+    name: "",
+    lastName: "",
+    rol: "",
+    birthdate: "",
+    documentType: "",
+    documentNumber: "",
+    email: "",
+    phone: "",
+    area: "",
+    senaVinculation: "",
+    formationCenter: "",
+    competitionName: ""
+  });
 
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  // Función de validación mejorada
+  const validateField = (fieldName, value) => {
+    // Si se proporciona un campo específico, validar solo ese campo
+    if (fieldName) {
+      let errorMessage = "";
+      const safeValue = value !== undefined ? value : formData[fieldName];
+
+      switch (fieldName) {
+        case "name":
+        case "lastName":
+        case "area":
+        case "senaVinculation":
+        case "competitionName":
+        case "rol":
+          if (!String(safeValue || "").trim()) {
+            errorMessage = `El campo es obligatorio`;
+          } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(safeValue)) {
+            errorMessage = "Este campo solo debe contener letras";
+          }
+          break;
+
+        case "documentType":
+          if (!safeValue) {
+            errorMessage = "Selecciona un tipo de documento";
+          }
+          break;
+
+        case "documentNumber":
+        case "phone":
+          if (!String(safeValue || "").trim()) {
+            errorMessage = `El número es obligatorio`;
+          } else if (!/^\d{10}$/.test(safeValue)) {
+            errorMessage = "Debe contener 10 dígitos";
+          }
+          break;
+
+        case "email":
+          if (!String(safeValue || "").trim()) {
+            errorMessage = "El correo electrónico es obligatorio";
+          } else if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(safeValue)) {
+            errorMessage = "Formato de correo electrónico inválido";
+          }
+          break;
+
+        case "birthdate":
+          if (!safeValue) {
+            errorMessage = "La fecha de nacimiento es obligatoria";
+          } else {
+            const today = new Date();
+            const birthDate = new Date(safeValue);
+            if (birthDate >= today) {
+              errorMessage = "La fecha debe ser en el pasado";
+            } else {
+              // Verificar edad mínima (18 años)
+              const age = today.getFullYear() - birthDate.getFullYear();
+              const monthDiff = today.getMonth() - birthDate.getMonth();
+              if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                if (age - 1 < 18) {
+                  errorMessage = "Debe tener al menos 18 años";
+                }
+              } else if (age < 18) {
+                errorMessage = "Debe tener al menos 18 años";
+              }
+            }
+          }
+          break;
+
+        case "formationCenter":
+          if (!safeValue) {
+            errorMessage = "Selecciona un centro de formación";
+          }
+          break;
+
+        default:
+          break;
+      }
+
+      return errorMessage;
+    } 
+    // Si no se proporciona un campo específico, validar todos los campos
+    else {
+      let newErrors = {};
+      
+      // Campos con validación de texto (solo letras)
+      const textFields = ["name", "lastName", "area", "senaVinculation", "competitionName", "rol"];
+      textFields.forEach(field => {
+        if (!String(formData[field] || "").trim()) {
+          newErrors[field] = `El campo es obligatorio`;
+        } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(formData[field])) {
+          newErrors[field] = "Este campo solo debe contener letras";
+        }
+      });
+      
+      // Campos numéricos (10 dígitos)
+      const numericFields = ["documentNumber", "phone"];
+      numericFields.forEach(field => {
+        if (!String(formData[field] || "").trim()) {
+          newErrors[field] = `El número es obligatorio`;
+        } else if (!/^\d{10}$/.test(formData[field])) {
+          newErrors[field] = "Debe contener 10 dígitos";
+        }
+      });
+      
+      // Validación de email
+      if (!String(formData.email || "").trim()) {
+        newErrors.email = "El correo electrónico es obligatorio";
+      } else if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+        newErrors.email = "Formato de correo electrónico inválido";
+      }
+      
+      // Validación de fecha de nacimiento
+      if (!formData.birthdate) {
+        newErrors.birthdate = "La fecha de nacimiento es obligatoria";
+      } else {
+        const today = new Date();
+        const birthDate = new Date(formData.birthdate);
+        if (birthDate >= today) {
+          newErrors.birthdate = "La fecha debe ser en el pasado";
+        } else {
+          // Verificar edad mínima (18 años)
+          const age = today.getFullYear() - birthDate.getFullYear();
+          const monthDiff = today.getMonth() - birthDate.getMonth();
+          if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            if (age - 1 < 18) {
+              newErrors.birthdate = "Debe tener al menos 18 años";
+            }
+          } else if (age < 18) {
+            newErrors.birthdate = "Debe tener al menos 18 años";
+          }
+        }
+      }
+      
+      // Campos de selección
+      if (!formData.documentType) {
+        newErrors.documentType = "Selecciona un tipo de documento";
+      }
+      
+      if (!formData.formationCenter) {
+        newErrors.formationCenter = "Selecciona un centro de formación";
+      }
+      
+      return newErrors;
+    }
   };
 
+  // Función actualizada para manejar cambios en los campos
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+
+    // Validar el campo modificado
+    const errorMessage = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: errorMessage
+    }));
+    
+    // Registrar que se han realizado cambios
+    setHasChanges(true);
+  };
+
+  // Función actualizada para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Eliminamos window.location.reload() para evitar la recarga completa de la página
+
+    // Validar todos los campos a la vez
+    const newErrors = validateField();
+    setErrors(newErrors);
     
+    // Verificar si hay errores de validación
+    if (Object.values(newErrors).some(error => error !== "")) {
+      message.error("Corrija los errores del formulario");
+      return;
+    }
+
     if (!formData.id) {
       message.error('ID no encontrado');
       return;
@@ -160,50 +353,58 @@ export const ModificarExperto = ({ onClose, expertData }) => {
     }
   };
 
+  // Componente para renderizar inputs con label flotante
+  const renderInput = ({ type = "text", name = "", placeholder = "" }) => (
+    <div className="view-expert-input-group">
+      <input
+        type={type}
+        name={name}
+        id={name}
+        value={formData[name] || ""}
+        onChange={handleChange}
+        className={`view-expert-form-input ${errors[name] ? "input-error" : ""}`}
+        placeholder=" "
+      />
+      <label htmlFor={name} className="view-expert-form-label">
+        {placeholder}
+      </label>
+      {errors[name] && <div className="error-message">{errors[name]}</div>}
+    </div>
+  );
+
+  // Componente para renderizar selects con label flotante
   const renderSelect = ({ label, name, options }) => (
     <div className="view-expert-input-group">
-      <label htmlFor={name} className="view-expert-form-label">
-        {label}
-      </label>
       <select
         id={name}
         name={name}
-        value={formData[name]}
+        value={formData[name] || ""}
         onChange={handleChange}
-        className="view-expert-form-select"
+        className={`view-expert-form-select ${errors[name] ? "input-error" : ""}`}
       >
-        <option value="">Seleccionar</option>
+        <option value=""></option>
         {options.map(option => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
       </select>
-    </div>
-  );
-
-  const renderInput = ({ type = "text", name, placeholder }) => (
-    <div className="view-expert-input-group">
-      <input
-        type={type}
-        name={name}
-        placeholder=" "  // Placeholder vacío pero con un espacio
-        value={formData[name]}
-        onChange={handleChange}
-        className="view-expert-form-input"
-        readOnly={false}
-      />
-      <span>{placeholder}</span>
+      <label htmlFor={name} className="view-expert-form-label">
+        {label}
+      </label>
+      {errors[name] && <div className="error-message">{errors[name]}</div>}
     </div>
   );
 
   return (
     <div className="view-expert-edit-container">
-          <button type="button" onClick={() => onClose(null, false)} className="back-button-expert"><GoChevronLeft />Volver atrás</button>
+      <button type="button" onClick={() => onClose(null, false)} className="back-button-experto"><GoChevronLeft />Volver atrás</button>
 
       <h1 className="expert-title-edit"><b>Modificar Experto Regional: </b> {formData.name} {formData.lastName}</h1>
       
-      <form onSubmit={handleSubmit} className="expert-form-edit"  >
+      <form onSubmit={handleSubmit} className="expert-form-edit">
+        {error && <div className="error-general">{error}</div>}
+        {successMessage && <div className="success-message">{successMessage}</div>}
 
         <input 
           type="hidden" 
@@ -230,11 +431,13 @@ export const ModificarExperto = ({ onClose, expertData }) => {
           name: "documentNumber", 
           placeholder: "Número de documento" 
         })}
+        
         {renderInput({ 
           name: "email", 
           placeholder: "Correo electrónico",
           type: "email"
         })}
+        
         {renderInput({ 
           name: "phone", 
           placeholder: "Número de teléfono" 
@@ -264,14 +467,15 @@ export const ModificarExperto = ({ onClose, expertData }) => {
           name: "senaVinculation", 
           placeholder: "Vinculación SENA" 
         })}
+        
         {renderInput({ name: "competitionName", placeholder: "Habilidad" })}
 
-      <div className="button-container-edit">
+        <div className="button-container-edit">
           <button 
             type="submit" 
             className="edit-experto-button"
             disabled={isLoading}
-            >
+          >
             <PiPencilSimpleLineFill /> 
             {isLoading ? "Modificando..." : "Guardar"}
           </button>
@@ -281,12 +485,11 @@ export const ModificarExperto = ({ onClose, expertData }) => {
             className="delete-expert-button"
             disabled={isLoading}
             onClick={handleDelete} 
-            >
+          >
             {isLoading ? "Eliminando..." : "Eliminar competidor"}
           </button>
-            </div>
-      
-              </form>
+        </div>
+      </form>
     </div>
   );
 };

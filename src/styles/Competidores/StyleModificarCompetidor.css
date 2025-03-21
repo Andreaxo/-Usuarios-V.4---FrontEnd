@@ -4,113 +4,30 @@
   padding: 2rem;
   text-align: center;
   --color-green: #39a900;
-    --color-dark-green: #007832;
-    --color-blue: #00304D;
-    --color-white: #F6F6F6;
-    --color-gray: #e9e9e9   ;
-    --color-dark-gray: #bebebe;
-    --color-dark-gray-transparent: #bebebe2f;
-    --color-black: #1a1a1a;
-    --font-weight-title: 700;
-    --font-weight-subtitle: 500;
-    --font-weight-text: 400;
-    --border-radius-box: 26px;
-    --border-radius-box-2: 16px;
+  --color-dark-green: #007832;
+  --color-blue: #00304D;
+  --color-white: #F6F6F6;
+  --color-gray: #e9e9e9;
+  --color-dark-gray: #bebebe;
+  --color-dark-gray-transparent: #bebebe2f;
+  --color-black: #1a1a1a;
+  --color-error: #ff4d4f;
+  --color-error-bg: #fff1f0;
+  --color-error-border: #ffccc7;
+  --font-weight-title: 700;
+  --font-weight-subtitle: 500;
+  --font-weight-text: 400;
+  --border-radius-box: 26px;
+  --border-radius-box-2: 16px;
+  --border-radius-input: 2rem;
+  --border-radius-button: 1rem;
 }
 
-/* Estilos generales */
-.login_container-passwordinput,
-.login_container-userinput {
-  border: 1px solid var(--color-black); /* Borde negro */
-  height: 2.8rem;
-  border-radius: 2rem;
-  background-color: transparent;
-  padding-left: 10px;
-  outline: none;
-  width: 100% !important;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-/* Estilo para cuando los inputs están enfocados */
-.login_container-passwordinput:focus,
-.login_container-userinput:focus {
-  border-color: #4CAF50; /* Verde */
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
-  
-}
-
-/* Estilo para los labels */
-.login__container--labelsubcontainer label,
-.standard-input-container label {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-220%);
-  color: var(--color-black);
-  pointer-events: none;
-  transition: .3s ease-in-out;
-  font-size: 12px;
-  background-color: var(--color-white);
-  padding-left: 4px;
-  padding-right: 4px;
-}
-
-/* Subcontendor para label e input */
-.login__container--labelsubcontainer {
-  position: relative;
-  margin-bottom: 1rem; /* Espacio entre campos */
-}
-
-.submit-button-aprendiz{
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  position: absolute; /* Posiciona el texto de manera absoluta respecto al contenedor */
-  top: 0; /* Parte superior */
-  left: 0; /* Esquina izquierda */
-  font-size: 16px; /* Tamaño del texto */
-  color: black; /* Color del texto */
-  padding: 3rem; /
-}
-
-.select-button-aprendiz{
-  padding: 1rem;
-  background-color: var(--color-green);
-  border: solid 2px black;
-  border-radius: 1rem;
-}
-
-
-
+/* Layout Containers */
 .competidor-container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-}
-
-.volver-button {
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  left: 0;
-  font-size: 16px;
-  color: black;
-  padding: 3rem;
-}
-
-.competidor-titulo {
-  text-align: left;
-  margin: 1.5rem 0;
-  font-weight: var(--font-weight-title);
-}
-
-.etapa-titulo {
-  text-align: left;
-  margin-top: 2rem;
-  font-weight: var(--font-weight-subtitle);
 }
 
 .grid-container {
@@ -133,73 +50,151 @@
   gap: 1rem;
 }
 
-/* Estilos para los inputs y selects */
-.login_container-passwordinput,
-.login_container-userinput {
+/* Form Fields */
+.competitor-form__field {
+  position: relative;
+  margin-bottom: 1rem;
+  width: 90%;
+  min-width: 16rem;
+}
+
+.competitor-form__input {
   border: 1px solid var(--color-black);
   height: 2.8rem;
-  border-radius: 2rem;
+  border-radius: var(--border-radius-input);
   background-color: transparent;
   padding-left: 10px;
   outline: none;
-  width: 100% !important;
+  width: 100%;
   font-size: 1rem;
   transition: border-color 0.3s ease;
 }
 
-.login_container-passwordinput:focus,
-.login_container-userinput:focus {
-  border-color: #4CAF50;
+.competitor-form__input:focus {
+  border-color: var(--color-green);
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
 }
 
-.login__container--labelsubcontainer {
-  position: relative;
-  margin-bottom: 1rem;
+.competitor-form__input--error {
+  border: 1px solid var(--color-error) !important;
+  background-color: var(--color-error-bg);
 }
 
-.login__container--labelsubcontainer label {
+.competitor-form__label {
   position: absolute;
+  left: 15px;
   top: 50%;
-  left: 10px;
-  transform: translateY(-220%);
-  color: var(--color-black);
+  transform: translateY(-50%);
+  background-color: transparent;
+  transition: all 0.2s ease;
   pointer-events: none;
-  transition: .3s ease-in-out;
-  font-size: 12px;
-  background-color: var(--color-white);
-  padding-left: 4px;
-  padding-right: 4px;
+  color: var(--color-dark-black);
+  padding: 0 5px;
+  font-size: 0.9rem;
 }
 
-/* Estilos para los botones */
-.botones-container {
+/* When input is focused or has value, move label up */
+.competitor-form__input:focus + .competitor-form__label,
+.competitor-form__input:not(:placeholder-shown) + .competitor-form__label {
+  top: 0;
+  transform: translateY(-50%);
+  background-color: var(--color-white);
+  font-size: 12px;
+  z-index: 1;
+}
+
+.competitor-form__error-message {
+  color: var(--color-error);
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.form-error {
+  color: var(--color-error);
+  margin-bottom: 16px;
+  padding: 8px;
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  border-radius: 4px;
+}
+
+/* Headings */
+.competidor-titulo {
+  text-align: left;
+  margin: 1.5rem 0;
+  font-weight: var(--font-weight-title);
+}
+
+.etapa-titulo {
+  text-align: left;
+  margin-top: 2rem;
+  font-weight: var(--font-weight-subtitle);
+}
+
+/* Buttons */
+.button-container-competidor {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 1rem;
   margin-top: 2rem;
 }
 
-.boton-accion {
-  padding: 1rem;
-  border-radius: 1rem;
-  border: solid 2px black;
+.save-button-competidor {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-black);
+  border: none;
+  border-radius: var(--border-radius-button);
+  color: #61e268;
   cursor: pointer;
-  font-weight: var(--font-weight-subtitle);
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.boton-subir, .boton-modificar {
-  background-color: var(--color-green);
-  color: white;
+.select-button-competidor {
+  padding: 0.75rem 1.5rem;
+  border: solid var(--color-black) 1px;
+  border-radius: var(--border-radius-button);
+  color: #000000;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.boton-eliminar {
-  background-color: white;
-  border: 2px solid red;
-  color: red;
+.delete-button-competidor {
+  padding: 0.75rem 1.5rem;
+  background-color: transparent;
+  border: solid var(--color-error) 1px;
+  border-radius: var(--border-radius-button);
+  color: var(--color-error);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-/* Estilos para el popup */
+.volver-button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 16px;
+  color: black;
+  padding: 3rem;
+}
+
+/* Popup */
 .popup-overlay {
   position: fixed;
   top: 0;
@@ -231,15 +226,15 @@
   white-space: pre;
 }
 
-/* Estilos responsivos */
+/* Responsive styles */
 @media (max-width: 768px) {
-  .grid-container, .documentos-grid {
+  .grid-container, 
+  .documentos-grid {
     grid-template-columns: 1fr;
   }
   
-  .botones-container {
+  .button-container-competidor {
     flex-direction: column;
     align-items: stretch;
   }
 }
-

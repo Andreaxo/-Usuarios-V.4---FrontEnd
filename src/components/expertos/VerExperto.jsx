@@ -4,6 +4,7 @@ import '../../styles/Expertos/StyleVerExperto.css';
 import { GoChevronLeft } from "react-icons/go";
 import { PiPencilSimpleLineFill } from "react-icons/pi";
 import { ModificarExperto } from "./ModificarExperto";
+import { message } from "antd";
 
 
 const TIPOS_DOCUMENTO = [
@@ -127,10 +128,12 @@ export const VerExperto = ({ onClose, expertData }) => {
       setIsLoading(true);
       await axios.delete(`http://localhost:3000/api/clientes/${formData.id}`);
       // Después de borra, se cierra este componente y se refresca la lista
-    
+    onClose(formData, true);
+    message.success("Experto eliminado correctamente");
     } catch (error) {
       console.error("Error deleting expert:", error);
       setError("Error al eliminar el experto");
+      message.error(error, " Error al eliminar el experto");
     } finally {
       setIsLoading(false);
     }

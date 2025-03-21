@@ -22,7 +22,8 @@ text-align: center;
 
 
 .create-expert-container {
-max-width: 1000px;
+max-width: 50rem;
+height: 56rem;
 margin: 0 auto;
 padding: 0.5rem;
 border-radius: 2rem;
@@ -206,6 +207,7 @@ overflow-y: auto;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 1rem;
 }
 
 .submit-button-guardar:hover {
@@ -244,3 +246,32 @@ input[type="date"] {
   }
 }
 
+/* ------------------ ERRORES ----------- */
+
+.input-error {
+  border: 1px solid #ff3333 !important;
+}
+
+.error-message {
+  color: #ff3333;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.error-general {
+  color: #ff3333;
+  background-color: #ffeeee;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ff3333;
+}
+
+.success-message {
+  color: #33aa33;
+  background-color: #eeffee;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #33aa33;
+}
