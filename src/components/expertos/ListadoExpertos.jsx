@@ -211,7 +211,6 @@ const fetchExpertos = async () => {
           <Button 
               className="crearExperto"
               onClick={() => setIsModalOpen(true)}
-              style={{border: 'solid black 1px'}}
           >
               Crear Experto
           </Button>

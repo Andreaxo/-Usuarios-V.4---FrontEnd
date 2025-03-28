@@ -33,14 +33,15 @@
 
 .crearExperto{
     cursor: pointer;
-    background-color: rgb(96, 242, 93);
+    background-color: var(--color-green);
     padding: 1.5rem;
     padding-right: 3rem;
     padding-left: 3rem;
     font-size: 1rem;
     margin: 1.5rem 0rem 0rem ;
     border-radius: 20px;
-    border: solid black 5rem;
+    color: white;
+    border: none;
 
 
 }
@@ -50,3 +51,4 @@
     width: 90%;
     margin: 0 5% 0 5%;
 }
+

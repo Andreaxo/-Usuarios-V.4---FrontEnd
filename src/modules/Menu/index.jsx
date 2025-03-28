@@ -13,7 +13,6 @@ import Aspirantes from '../Aspirantes'
 import Competidores from '../Competidores';
 import Habilidades from '../Habilidades';
 import Documentos from '../Documentos';
-import Eventos from '../Eventos';
 import Expertos from '../Expertos';
 import { useState } from 'react';
 import DocumentosPopUp from '../DocumentosPopUp';
@@ -21,6 +20,7 @@ import {ListadoCompetidor} from '../../components/competidores/ListadoCompetidor
 import { ListadoAprendiz } from '../../components/aprendiz/ListadoAprendiz';
 import { ListadoExpertos } from '../../components/expertos/ListadoExpertos';
 import ShowSkills from '../skills/showSkills';
+import { Eventos } from '../../components/eventos/eventos';
 
 function Menu(){
     let classButton;
@@ -82,7 +82,7 @@ function Menu(){
                         )}
 
                     <button className={`container--menu--button ${activeButton === 'Eventos' ? 'menu--button--active' : ''}`}
-                    onClick={() => handleMenu(<Eventos />, 'Eventos')}><span><BsCalendar2EventFill /></span> <span>Eventos</span></button>
+                    onClick={() => handleMenu(<Eventos/>, 'Eventos')}><span><BsCalendar2EventFill /></span> <span>Eventos</span></button>
                     <button className={`container--menu--button ${activeButton === 'Expertos' ? 'menu--button--active' : ''}`}
                     onClick={() => handleMenu(<ListadoExpertos />, 'Expertos')}><span><GrUserExpert /></span> <span>Expertos</span></button>
 

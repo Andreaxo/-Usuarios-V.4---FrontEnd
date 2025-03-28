@@ -1,0 +1,80 @@
+.events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    
+  }
+  .events .ant-badge-status {
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .notes-month {
+    font-size: 28px;
+    text-align: center;
+    
+    
+  }
+
+  .notes-month section {
+    font-size: 28px;
+    border-radius: 1rem;
+  }
+
+  .eventos_container{
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+  .calendar_container{
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 5rem;
+}
+
+.ant-picker-body, .ant-picker-date-panel{
+    border-radius: 6rem;
+}
+
+.title_event{
+    margin: 1rem;
+}
+
+:where(.css-dev-only-do-not-override-1a3rktk).ant-picker-calendar.ant-picker-calendar-full .ant-picker-panel{
+  border-radius: 5rem;
+}
+
+:where(.css-dev-only-do-not-override-1a3rktk).ant-picker-calendar .ant-picker-calendar-header{
+  justify-content: center;
+}
+
+.btn-crear-evento{
+  cursor: pointer;
+  background-color: var(--color-green);
+  padding: 1.5rem;
+  padding-right: 3rem;
+  padding-left: 3rem;
+  font-size:medium;
+  margin: 1.5rem 2rem 0rem;
+  border-radius: 20px;
+  color: white;
+  border: none;
+
+}
+
+.title_event{
+  background-color: var(--color-black);
+    padding: 20px;
+    font-size: 3rem;
+    border-radius: 20px;
+    margin-left: 5rem;
+    color: white;
+}
+
+.title-container-evento{
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}

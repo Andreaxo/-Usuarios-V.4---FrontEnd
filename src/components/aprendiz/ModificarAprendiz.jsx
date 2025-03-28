@@ -308,7 +308,7 @@ export const ModificarAprendiz = ({ onClose, expertData }) => {
       
       if (response.data) {
         message.success("Aspirante modificado exitosamente");
-        onClose(true);  // Pass true to indicate changes were made
+        onClose(true, formData);  // Pass true to indicate changes were made
       }
 
     } catch (error) {
@@ -371,7 +371,7 @@ const renderInput = ({ type = "text", name = "", placeholder = "" }) => (
     <div className="crear-experto">
         <button 
           type="button" 
-          onClick={() => onClose(false)} 
+          onClick={() => onClose(false, null)} 
           className="submit-button-aprendiz"
         >
          <GoChevronLeft /> Volver atrás

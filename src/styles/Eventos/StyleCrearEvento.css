@@ -1,0 +1,43 @@
+
+.submit-button-save{
+    padding: 0.75rem 1.5rem;
+    background-color: transparent;
+    border: solid 1px var(--color-black);
+    border-radius: 1rem;
+    color: var(--color-black);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    
+    justify-content: center;
+    
+}
+
+.select-aprendiz-button{
+    padding: 0.75rem 1.5rem;
+    background-color: var(--color-green);
+    border: solid 1px var(--color-black);
+    border-radius: 1rem;
+    color: var(--color-black);
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.button-container{
+    display: grid;
+    grid-auto-flow: column; /* Acomoda los elementos en fila horizontal */
+    grid-auto-columns: minmax(200px, auto); /* Ancho adaptable */
+    gap: 20px; /* Espaciado entre elementos */
+    margin-top: -3rem;
+    padding: 0.5rem;
+  }
